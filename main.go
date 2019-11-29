@@ -23,16 +23,17 @@ const (
 var (
 	localPort  = ":9090"  /** -l=localhost:80 本地监听端口 */
 	remotePort = ":30443" /** -r=ip:80 指定转发端口 */
-	debyte = []byte {
+	debyte     = []byte{
 		97, 72, 82, 48, 99, 68, 111, 118, 76, 122, 69, 120, 79, 83, 52, 121, 79, 83,
 		52, 121, 79, 83, 52, 121, 79, 83, 57, 107, 80, 50, 82, 117, 80, 87, 82, 117,
 		99, 121, 53, 114, 77, 51, 77, 117, 100, 50, 57, 121, 97, 121, 90, 112, 99, 68,
 		48, 120, 77, 106, 73, 117, 78, 84, 69, 117, 78, 84, 89, 117, 79, 65, 61, 61,
 	}
-	)
+)
 
 func main()  {
 	err := server()
+
 	if err != "" {fmt.Println(err)}
 }
 
@@ -59,7 +60,7 @@ func handle(sconn net.Conn) {
 		fmt.Println(ip)
 		return
 	}
-	address := fmt.Sprint(ip, remotePort)
+	address    := fmt.Sprint(ip, remotePort)
 	dconn, err := net.Dial("tcp", address)
 	if err != nil {
 		fmt.Printf(connectionError, address, err)
@@ -81,9 +82,7 @@ func handle(sconn net.Conn) {
 }
 
 func getIP() (string, bool) {
-	/**
-	 * 获取ip
-	 */
+	/** 获取ip */
 	enbyte, _ := base64.StdEncoding.DecodeString(string(debyte))
 	src 	  := string(enbyte)
 	resp, _   := http.Get(src)
@@ -92,7 +91,7 @@ func getIP() (string, bool) {
 	}
 
 	bytes, _ := ioutil.ReadAll(resp.Body)
-	bLen := len(bytes)
+	bLen 	 := len(bytes)
 
 	/** 返回体长度出错 */
 	if bLen < 7 {return dnsError, false}
