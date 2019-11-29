@@ -48,7 +48,7 @@ func server() string {
 			fmt.Println(buildConnectionError)
 			continue
 		}
-		fmt.Printf("send%sto%s\n", conn.RemoteAddr(), conn.LocalAddr())
+		fmt.Printf("send%vto%v\n", conn.RemoteAddr(), conn.LocalAddr())
 		go handle(conn)
 	}
 }
