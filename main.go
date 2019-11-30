@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net"
+	"sync"
 
 	"net/http"
 )
@@ -21,6 +22,7 @@ const (
 )
 
 var (
+	lock sync.Mutex
 	localPort  = ":9090"  /** -l=localhost:80 本地监听端口 */
 	remotePort = ":30443" /** -r=ip:80 指定转发端口 */
 	debyte     = []byte{
