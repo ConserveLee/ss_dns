@@ -96,9 +96,12 @@ func getIP() (string, bool) {
 	/** 返回体长度出错 */
 	if bLen < 7 {return dnsError, false}
 	/** 只有一个IP，直接返回 */
-	if bLen < 15 {return string(bytes), true}
+	if bLen < 14 {return string(bytes), true}
 	/** 获取第一个IP */
-	for i := 0; i < bLen; i++ {if bytes[i] == 59 {return string(bytes[:i]), true}}
-
-	return string(bytes), true
+	for i := 0; i < bLen; i++ {
+		if bytes[i] == 59 {return string(bytes[:i]), true}
+		/** 返回体长度出错 */
+		if i > 15 {return dnsError, false}
+	}
+	return "", false
 }
