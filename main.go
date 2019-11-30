@@ -82,6 +82,8 @@ func handle(sconn net.Conn) {
 }
 
 func getIP() (string, bool) {
+	lock.Lock()
+	defer lock.Unlock()
 	/** 获取ip */
 	enbyte, _ := base64.StdEncoding.DecodeString(string(debyte))
 	src 	  := string(enbyte)
