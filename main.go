@@ -1,14 +1,13 @@
 package main
 
 import (
-	"encoding/base64"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net"
-	"sync"
-
 	"net/http"
+	"os/exec"
+	"sync"
 )
 
 const (
@@ -22,20 +21,16 @@ const (
 )
 
 var (
-	lock sync.Mutex
+	lock       sync.Mutex
 	localPort  = ":9090"  /** -l=localhost:80 本地监听端口 */
 	remotePort = ":30159" /** -r=ip:80 指定转发端口 */
-	debyte     = []byte{
-		97, 72, 82, 48, 99, 68, 111, 118, 76, 122, 69, 120, 79, 83, 52, 121, 79, 83,
-		52, 121, 79, 83, 52, 121, 79, 83, 57, 107, 80, 50, 82, 117, 80, 87, 82, 117,
-		99, 121, 53, 114, 77, 51, 77, 117, 100, 50, 57, 121, 97, 121, 90, 112, 99, 68,
-		48, 120, 77, 106, 73, 117, 78, 84, 69, 117, 78, 84, 89, 117, 79, 65, 61, 61,
-	}
+	src        string
+	src01      = "http://119.29.29.29/d?dn=dns.01.k3s.work&ip=122.51.56.8"
+	src02      = "http://119.29.29.29/d?dn=dns.02.k3s.work&ip=122.51.56.8"
 )
 
 func main()  {
 	err := server()
-
 	if err != "" {fmt.Println(err)}
 }
 
@@ -58,6 +53,10 @@ func server() string {
 func handle(sconn net.Conn) {
 	defer sconn.Close()
 	ip, ok := getIP()
+	if ip == "150.109.150.43" {
+		/** 非集群,先写个特殊逻辑 */
+		remotePort = ":53306"
+	}
 	if !ok {
 		fmt.Println(ip)
 		return
@@ -87,9 +86,13 @@ func getIP() (string, bool) {
 	lock.Lock()
 	defer lock.Unlock()
 	/** 获取ip */
-	enbyte, _ := base64.StdEncoding.DecodeString(string(debyte))
-	src 	  := string(enbyte)
-	resp, _   := http.Get(src)
+	if checkNetWorkStatus() {
+		src = src01
+	} else {
+		src = src02
+	}
+
+	resp, _ := http.Get(src)
 	if resp.StatusCode != 200 {
 		return getDnsError, false
 	}
@@ -108,4 +111,13 @@ func getIP() (string, bool) {
 		if i > 15 {return dnsError, false}
 	}
 	return "", false
+}
+
+func checkNetWorkStatus() bool {
+	cmd := exec.Command("ping", "dns.01.k3s.work", "-c", "1", "-W", "5")
+	err := cmd.Run()
+	if err != nil {
+		return false
+	}
+	return true
 }
