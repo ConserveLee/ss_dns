@@ -53,10 +53,6 @@ func server() string {
 func handle(sconn net.Conn) {
 	defer sconn.Close()
 	ip, ok := getIP()
-	if ip == "150.109.150.43" {
-		/** 非集群,先写个特殊逻辑 */
-		remotePort = ":53306"
-	}
 	if !ok {
 		fmt.Println(ip)
 		return
@@ -89,7 +85,7 @@ func getIP() (string, bool) {
 	if checkNetWorkStatus() {
 		src = src01
 	} else {
-		src = src02
+		return "119.28.177.253", true
 	}
 
 	resp, _ := http.Get(src)
