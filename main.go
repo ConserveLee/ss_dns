@@ -23,10 +23,8 @@ const (
 var (
 	lock       sync.Mutex
 	localPort  = ":9090"  /** -l=localhost:80 本地监听端口 */
-	remotePort = ":30159" /** -r=ip:80 指定转发端口 */
-	src        string
-	src01      = "http://119.29.29.29/d?dn=dns.01.k3s.work&ip=122.51.56.8"
-	src02      = "http://119.29.29.29/d?dn=dns.02.k3s.work&ip=122.51.56.8"
+	remotePort = ":30443" /** -r=ip:80 指定转发端口 */
+	src        = "http://119.29.29.29/d?dn=dns.k3s.work&ip=122.51.56.8"
 )
 
 func main()  {
@@ -82,10 +80,8 @@ func getIP() (string, bool) {
 	lock.Lock()
 	defer lock.Unlock()
 	/** 获取ip */
-	if checkNetWorkStatus() {
-		src = src01
-	} else {
-		return "119.28.177.253", true
+	if true {/** 先单节点用着 */
+		return "150.109.150.43", true
 	}
 
 	resp, _ := http.Get(src)
