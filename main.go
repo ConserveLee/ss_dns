@@ -81,7 +81,7 @@ func getIP() (string, bool) {
 	defer lock.Unlock()
 	/** 获取ip */
 	if true {/** 先单节点用着 */
-		return "150.109.150.43", true
+		return "129.226.124.44", true
 	}
 
 	resp, _ := http.Get(src)
