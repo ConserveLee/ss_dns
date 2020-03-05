@@ -80,7 +80,7 @@ func getIP() (string, bool) {
 	lock.Lock()
 	defer lock.Unlock()
 	/** 获取ip */
-	//return "129.226.124.44", true
+	return "129.226.124.44", true
 
 	resp, _ := http.Get(src)
 	if resp.StatusCode != 200 {
