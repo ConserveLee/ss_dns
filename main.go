@@ -104,7 +104,7 @@ func getIP() (string, bool) {
 }
 
 func checkNetWorkStatus() bool {
-	cmd := exec.Command("ping", "dns.01.k3s.work", "-c", "1", "-W", "5")
+	cmd := exec.Command("ping", "dns.k3s.work", "-c", "1", "-W", "5")
 	err := cmd.Run()
 	if err != nil {
 		return false
