@@ -24,7 +24,7 @@ var (
 	lock       sync.Mutex
 	localPort  = ":9090"  /** -l=localhost:80 本地监听端口 */
 	remotePort = ":30443" /** -r=ip:80 指定转发端口 */
-	src        = "http://119.29.29.29/d?dn=dns.k3s.work&ip=106.52.80.18"
+	src        = "http://119.29.29.29/d?dn=dns.k3s.work&ip=122.51.56.8"
 )
 
 func main()  {
