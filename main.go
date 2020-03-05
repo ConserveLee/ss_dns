@@ -52,10 +52,9 @@ func handle(sconn net.Conn) {
 	defer sconn.Close()
 	ip, ok := getIP()
 	if !ok {
-		fmt.Println("?:",ip)
+		fmt.Println("httpDns接口出错")
 		return
 	}
-	fmt.Println("ip:", ip)
 	address    := fmt.Sprint(ip, remotePort)
 	dconn, err := net.Dial("tcp", address)
 	if err != nil {
@@ -91,16 +90,18 @@ func getIP() (string, bool) {
 	bytes, _ := ioutil.ReadAll(resp.Body)
 	bLen 	 := len(bytes)
 
+	fmt.Println(string(bytes))
+	fmt.Println(bLen)
 	/** 返回体长度出错 */
-	if bLen < 7 {return dnsError, false}
-	/** 只有一个IP，直接返回 */
-	if bLen < 14 {return string(bytes), true}
-	/** 获取第一个IP */
-	for i := 0; i < bLen; i++ {
-		if bytes[i] == 59 {return string(bytes[:i]), true}
-		/** 返回体长度出错 */
-		if i > 15 {return dnsError, false}
-	}
+	//if bLen < 7 {return dnsError, false}
+	///** 只有一个IP，直接返回 */
+	//if bLen < 14 {return string(bytes), true}
+	///** 获取第一个IP */
+	//for i := 0; i < bLen; i++ {
+	//	if bytes[i] == 59 {return string(bytes[:i]), true}
+	//	/** 返回体长度出错 */
+	//	if i > 15 {return dnsError, false}
+	//}
 	return "", false
 }
 
