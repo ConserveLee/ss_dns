@@ -91,14 +91,14 @@ func getIP() (string, bool) {
 	bLen 	 := len(bytes)
 
 	/** 返回体长度出错 */
-	if bLen < 8 {return dnsError, false}
+	if bLen < 7 {return dnsError, false}
 	/** 只有一个IP，直接返回 */
-	if bLen < 15 {return string(bytes), true}
+	if bLen < 17 {return string(bytes), true}
 	/** 获取第一个IP */
 	for i := 0; i < bLen; i++ {
 		if bytes[i] == 59 {return string(bytes[:i]), true}
 		/** 返回体长度出错 */
-		if i > 15 {return dnsError, false}
+		if i > 16 {return dnsError, false}
 	}
 	return "", false
 }
