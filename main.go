@@ -52,9 +52,10 @@ func handle(sconn net.Conn) {
 	defer sconn.Close()
 	ip, ok := getIP()
 	if !ok {
-		fmt.Println(ip)
+		fmt.Println("?:",ip)
 		return
 	}
+	fmt.Println("ip:", ip)
 	address    := fmt.Sprint(ip, remotePort)
 	dconn, err := net.Dial("tcp", address)
 	if err != nil {
@@ -80,7 +81,7 @@ func getIP() (string, bool) {
 	lock.Lock()
 	defer lock.Unlock()
 	/** 获取ip */
-	return "129.226.124.44", true
+	//return "129.226.124.44", true
 
 	resp, _ := http.Get(src)
 	if resp.StatusCode != 200 {
